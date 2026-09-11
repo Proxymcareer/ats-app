@@ -1,0 +1,13 @@
+<header class="site">
+  <div class="container">
+    <a class="brand" href="/admin">ATS Admin</a>
+    <nav class="admin-nav">
+      <a href="/admin" class="<%= active === 'dashboard' ? 'active' : '' %>">Jobs</a>
+      <a href="/admin/search" class="<%= active === 'search' ? 'active' : '' %>">Search candidates</a>
+      <a href="/" target="_blank" rel="noopener">View careers page</a>
+      <form method="POST" action="/admin/logout" style="margin:0">
+        <button type="submit" class="btn secondary small">Log out</button>
+      </form>
+    </nav>
+  </div>
+</header>
