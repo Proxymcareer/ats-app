@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <%- include('../partials/head', { title: application.name }) %>
+</head>
+<body>
+  <%- include('../partials/admin-nav', { active: 'dashboard' }) %>
+  <main>
+    <div class="container">
+      <p><a href="/admin/jobs/<%= application.job_id %>/pipeline">&larr; <%= application.job_title %> pipeline</a></p>
+      <h1><%= application.name %></h1>
+      <p class="job-meta">Applied for <strong><%= application.job_title %></strong> on
+        <%= new Date(application.applied_at).toLocaleString() %>
+      </p>
+
+      <div class="detail-grid">
+        <div>
+          <div class="card">
+            <h2>Stage</h2>
+            <form method="POST" action="/admin/applications/<%= application.id %>/stage">
+              <div class="field" style="max-width:260px;">
+                <select name="stage">
+                  <% stages.forEach(s => { %>
+                    <option value="<%= s %>" <%= s === application.stage ? 'selected' : '' %>><%= s %></option>
+                  <% }) %>
+                </select>
+              </div>
+              <button type="submit">Update stage</button>
+            </form>
+          </div>
+
+          <% if (application.cover_letter) { %>
+            <div class="card">
+              <h2>Cover letter</h2>
+              <div class="job-description"><%= application.cover_letter %></div>
+            </div>
+          <% } %>
+
+          <div class="card">
+            <h2>Notes</h2>
+            <form method="POST" action="/admin/applications/<%= application.id %>/notes">
+              <div class="field">
+                <textarea name="notes" rows="6" placeholder="Interview feedback, screening notes, etc."><%= application.notes || '' %></textarea>
+              </div>
+              <button type="submit">Save notes</button>
+            </form>
+          </div>
+        </div>
+
+        <div>
+          <div class="card">
+            <h2>Candidate</h2>
+            <ul class="meta-list">
+              <li><span class="label">Email</span><%= application.email %></li>
+              <% if (application.phone) { %><li><span class="label">Phone</span><%= application.phone %></li><% } %>
+              <% if (application.linkedin_url) { %>
+                <li><span class="label">Link</span><a href="<%= application.linkedin_url %>" target="_blank" rel="noopener"><%= application.linkedin_url %></a></li>
+              <% } %>
+            </ul>
+          </div>
+          <div class="card">
+            <h2>Resume</h2>
+            <% if (application.resume_filename) { %>
+              <a class="btn secondary" href="/admin/applications/<%= application.id %>/resume" target="_blank">
+                Download <%= application.resume_filename %>
+              </a>
+            <% } else { %>
+              <p class="job-meta">No resume on file.</p>
+            <% } %>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+</body>
+</html>

@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <%- include('../partials/head', { title: 'Search candidates' }) %>
+</head>
+<body>
+  <%- include('../partials/admin-nav', { active: 'search' }) %>
+  <main>
+    <div class="container">
+      <h1>Search candidates</h1>
+      <p class="lede">Searches resume text and cover letters across every application.</p>
+
+      <form method="GET" action="/admin/search" style="display:flex; gap:10px; max-width:500px;">
+        <input type="text" name="q" value="<%= q %>" placeholder="e.g. React, product management, Arabic" autofocus>
+        <button type="submit">Search</button>
+      </form>
+
+      <% if (q) { %>
+        <h2 style="margin-top:30px;"><%= results.length %> result<%= results.length === 1 ? '' : 's' %> for &ldquo;<%= q %>&rdquo;</h2>
+        <% if (results.length === 0) { %>
+          <div class="empty-state">No matches. Try a different term.</div>
+        <% } else { %>
+          <table class="admin-table">
+            <thead>
+              <tr><th>Candidate</th><th>Job</th><th>Stage</th><th></th></tr>
+            </thead>
+            <tbody>
+              <% results.forEach(r => { %>
+                <tr>
+                  <td><%= r.name %><br><span class="job-meta"><%= r.email %></span></td>
+                  <td><%= r.job_title %></td>
+                  <td><%= r.stage %></td>
+                  <td><a href="/admin/applications/<%= r.id %>">View</a></td>
+                </tr>
+              <% }) %>
+            </tbody>
+          </table>
+        <% } %>
+      <% } %>
+    </div>
+  </main>
+</body>
+</html>

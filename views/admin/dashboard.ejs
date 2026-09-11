@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <%- include('../partials/head', { title: 'Jobs' }) %>
+</head>
+<body>
+  <%- include('../partials/admin-nav', { active: 'dashboard' }) %>
+  <main>
+    <div class="container">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;">
+        <h1 style="margin:0;">Jobs</h1>
+        <a class="btn" href="/admin/jobs/new">+ New job</a>
+      </div>
+
+      <% if (jobs.length === 0) { %>
+        <div class="empty-state">No jobs yet. Create your first one.</div>
+      <% } else { %>
+        <table class="admin-table">
+          <thead>
+            <tr>
+              <th>Title</th>
+              <th>Status</th>
+              <th>Applicants</th>
+              <th>New</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+            <% jobs.forEach(job => { %>
+              <tr>
+                <td><a href="/admin/jobs/<%= job.id %>/pipeline"><%= job.title %></a></td>
+                <td><span class="status-pill <%= job.status %>"><%= job.status %></span></td>
+                <td><%= job.application_count %></td>
+                <td><%= job.new_count %></td>
+                <td style="text-align:right; white-space:nowrap;">
+                  <a class="btn secondary small" href="/admin/jobs/<%= job.id %>/edit">Edit</a>
+                  <form method="POST" action="/admin/jobs/<%= job.id %>/toggle-status" style="display:inline">
+                    <button type="submit" class="btn secondary small">
+                      <%= job.status === 'open' ? 'Close' : 'Reopen' %>
+                    </button>
+                  </form>
+                </td>
+              </tr>
+            <% }) %>
+          </tbody>
+        </table>
+      <% } %>
+    </div>
+  </main>
+</body>
+</html>

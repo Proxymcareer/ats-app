@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <%- include('../partials/head', { title: job && job.id ? 'Edit job' : 'New job' }) %>
+</head>
+<body>
+  <%- include('../partials/admin-nav', { active: 'dashboard' }) %>
+  <main>
+    <div class="container">
+      <p><a href="/admin">&larr; Jobs</a></p>
+      <h1><%= job && job.id ? 'Edit job' : 'New job' %></h1>
+
+      <% if (errors && errors.length) { %>
+        <div class="alert error">
+          <% errors.forEach(e => { %><div><%= e %></div><% }) %>
+        </div>
+      <% } %>
+
+      <form method="POST" action="<%= job && job.id ? '/admin/jobs/' + job.id : '/admin/jobs' %>">
+        <div class="field">
+          <label for="title">Job title</label>
+          <input type="text" id="title" name="title" value="<%= (job && job.title) || '' %>" required>
+        </div>
+        <div class="field">
+          <label for="department">Department <span class="optional">(optional)</span></label>
+          <input type="text" id="department" name="department" value="<%= (job && job.department) || '' %>">
+        </div>
+        <div class="field">
+          <label for="location">Location <span class="optional">(optional)</span></label>
+          <input type="text" id="location" name="location" value="<%= (job && job.location) || '' %>" placeholder="Remote, Amman, etc.">
+        </div>
+        <div class="field">
+          <label for="employment_type">Employment type</label>
+          <select id="employment_type" name="employment_type">
+            <% ['Full-time','Part-time','Contract','Internship'].forEach(t => { %>
+              <option value="<%= t %>" <%= (job && job.employment_type) === t ? 'selected' : '' %>><%= t %></option>
+            <% }) %>
+          </select>
+        </div>
+        <div class="field">
+          <label for="description">Description</label>
+          <textarea id="description" name="description" rows="10"><%= (job && job.description) || '' %></textarea>
+        </div>
+        <% if (job && job.id) { %>
+          <div class="field">
+            <label for="status">Status</label>
+            <select id="status" name="status">
+              <option value="open" <%= job.status === 'open' ? 'selected' : '' %>>Open</option>
+              <option value="closed" <%= job.status === 'closed' ? 'selected' : '' %>>Closed</option>
+            </select>
+          </div>
+        <% } %>
+        <button type="submit"><%= job && job.id ? 'Save changes' : 'Create job' %></button>
+      </form>
+    </div>
+  </main>
+</body>
+</html>

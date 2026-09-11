@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <%- include('../partials/head', { title: job.title + ' pipeline' }) %>
+</head>
+<body>
+  <%- include('../partials/admin-nav', { active: 'dashboard' }) %>
+  <main>
+    <div class="container" style="max-width: 1200px;">
+      <p><a href="/admin">&larr; Jobs</a></p>
+      <div style="display:flex; justify-content:space-between; align-items:center;">
+        <h1 style="margin:0;"><%= job.title %></h1>
+        <a class="btn secondary" href="/admin/jobs/<%= job.id %>/edit">Edit job</a>
+      </div>
+      <p class="job-meta"><%= [job.department, job.location].filter(Boolean).join(' · ') %></p>
+
+      <div class="pipeline-board">
+        <% stages.forEach(stage => { %>
+          <div class="pipeline-column">
+            <h3><%= stage %> (<%= board[stage].length %>)</h3>
+            <% board[stage].forEach(app => { %>
+              <div class="pipeline-card" data-app-id="<%= app.id %>">
+                <a href="/admin/applications/<%= app.id %>"><%= app.name %></a>
+                <div class="meta"><%= app.email %></div>
+                <div class="meta"><%= new Date(app.applied_at).toLocaleDateString() %></div>
+                <select class="stage-select" data-app-id="<%= app.id %>">
+                  <% stages.forEach(s => { %>
+                    <option value="<%= s %>" <%= s === stage ? 'selected' : '' %>><%= s %></option>
+                  <% }) %>
+                </select>
+              </div>
+            <% }) %>
+          </div>
+        <% }) %>
+      </div>
+    </div>
+  </main>
+  <script>
+    document.querySelectorAll('.stage-select').forEach(function (select) {
+      select.addEventListener('change', function () {
+        var appId = select.getAttribute('data-app-id');
+        fetch('/admin/applications/' + appId + '/stage', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+            'X-Requested-With': 'fetch',
+          },
+          body: 'stage=' + encodeURIComponent(select.value),
+        }).then(function () {
+          window.location.reload();
+        });
+      });
+    });
+  </script>
+</body>
+</html>
