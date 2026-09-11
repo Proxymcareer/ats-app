@@ -53,29 +53,6 @@ app.use((req, res, next) => {
   next();
 });
 
-// TEMPORARY debug instrumentation to diagnose a session-persistence issue.
-// Safe to remove once login is confirmed working.
-if (process.env.DEBUG_SESSION === 'true') {
-  app.use((req, res, next) => {
-    console.log(
-      '[SESSDBG]', req.method, req.originalUrl,
-      '| cookieHeader=', req.headers.cookie || '(none)',
-      '| sessionID=', req.sessionID,
-      '| adminId=', req.session && req.session.adminId
-    );
-    const origEnd = res.end;
-    res.end = function (...args) {
-      console.log(
-        '[SESSDBG] -> response', res.statusCode,
-        '| set-cookie=', res.getHeader('set-cookie') || '(none)',
-        '| location=', res.getHeader('location') || '(none)'
-      );
-      return origEnd.apply(this, args);
-    };
-    next();
-  });
-}
-
 app.use('/', publicRoutes);
 app.use('/admin', adminRoutes);
 
