@@ -10,6 +10,13 @@ const adminRoutes = require('./routes/admin');
 
 const app = express();
 
+// Render (and most PaaS hosts) terminate TLS at a proxy and forward plain
+// HTTP internally. Without this, Express can't tell the original request
+// was HTTPS, so express-session's `cookie.secure: true` silently refuses
+// to set the session cookie -- login "succeeds" but the browser never
+// gets a session, and every subsequent request looks logged-out.
+app.set('trust proxy', 1);
+
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
 
