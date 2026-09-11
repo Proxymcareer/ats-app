@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <%- include('partials/head', { title: job.title }) %>
+</head>
+<body>
+  <%- include('partials/site-header') %>
+  <main>
+    <div class="container">
+      <p><a href="/">&larr; All open roles</a></p>
+      <h1><%= job.title %></h1>
+      <p class="job-meta">
+        <%= [job.department, job.location, job.employment_type].filter(Boolean).join(' · ') %>
+      </p>
+
+      <div class="card job-description"><%= job.description %></div>
+
+      <h2>Apply for this role</h2>
+
+      <% if (errors && errors.length) { %>
+        <div class="alert error">
+          <% errors.forEach(e => { %><div><%= e %></div><% }) %>
+        </div>
+      <% } %>
+
+      <form method="POST" action="/jobs/<%= job.id %>/apply" enctype="multipart/form-data">
+        <div class="field">
+          <label for="name">Full name</label>
+          <input type="text" id="name" name="name" value="<%= form.name || '' %>" required>
+        </div>
+        <div class="field">
+          <label for="email">Email</label>
+          <input type="email" id="email" name="email" value="<%= form.email || '' %>" required>
+        </div>
+        <div class="field">
+          <label for="phone">Phone <span class="optional">(optional)</span></label>
+          <input type="tel" id="phone" name="phone" value="<%= form.phone || '' %>">
+        </div>
+        <div class="field">
+          <label for="linkedin_url">LinkedIn / portfolio URL <span class="optional">(optional)</span></label>
+          <input type="url" id="linkedin_url" name="linkedin_url" value="<%= form.linkedin_url || '' %>" placeholder="https://">
+        </div>
+        <div class="field">
+          <label for="resume">Resume <span class="optional">(PDF, Word, or plain text &middot; max 8MB)</span></label>
+          <input type="file" id="resume" name="resume" accept=".pdf,.doc,.docx,.txt" required>
+        </div>
+        <div class="field">
+          <label for="cover_letter">Cover letter <span class="optional">(optional)</span></label>
+          <textarea id="cover_letter" name="cover_letter"><%= form.cover_letter || '' %></textarea>
+        </div>
+        <button type="submit">Submit application</button>
+      </form>
+    </div>
+  </main>
+</body>
+</html>

@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <%- include('partials/head', { title: 'Not found' }) %>
+</head>
+<body>
+  <%- include('partials/site-header') %>
+  <main>
+    <div class="container">
+      <h1>Page not found</h1>
+      <p class="lede">Nothing lives at <code><%= url %></code>.</p>
+      <p><a href="/">&larr; Back to careers</a></p>
+    </div>
+  </main>
+</body>
+</html>

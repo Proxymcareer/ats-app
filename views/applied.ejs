@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <%- include('partials/head', { title: 'Application received' }) %>
+</head>
+<body>
+  <%- include('partials/site-header') %>
+  <main>
+    <div class="container">
+      <div class="alert success">
+        Thanks &mdash; your application for <strong><%= job.title %></strong> has been received.
+      </div>
+      <p><a href="/">&larr; Back to all open roles</a></p>
+    </div>
+  </main>
+</body>
+</html>

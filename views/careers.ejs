@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <%- include('partials/head', { title: 'Open roles' }) %>
+</head>
+<body>
+  <%- include('partials/site-header') %>
+  <main>
+    <div class="container">
+      <h1>Open roles</h1>
+      <p class="lede">We're hiring. Take a look and apply directly below &mdash; no LinkedIn account needed.</p>
+
+      <% if (jobs.length === 0) { %>
+        <div class="empty-state">There are no open positions right now. Check back soon.</div>
+      <% } else { %>
+        <% jobs.forEach(job => { %>
+          <a class="job-list-item" href="/jobs/<%= job.id %>">
+            <h3><%= job.title %></h3>
+            <div class="job-meta">
+              <%= [job.department, job.location, job.employment_type].filter(Boolean).join(' · ') %>
+            </div>
+          </a>
+        <% }) %>
+      <% } %>
+    </div>
+  </main>
+</body>
+</html>
